@@ -1,115 +1,107 @@
 ---
-title: YOUR-PRODUCT-NAME (Beta)
+title: Zettaset XCrypt Full Disk
 owner: Partners
 ---
 
 <p class="note warning">
 <strong>WARNING! </strong>
-The PRODUCT-NAME for Pivotal Data Suite tile is currently in beta and is intended for evaluation and test purposes only. 
+The Zettaset XCrypt Full Disk for Pivotal Data Suite tile is intended for evaluation and test purposes only. 
 Do not use this product in a PCF production environment.
 </p>
 
-**This topic begins with a brief description of what the product tile (e.g. Apigee Edge Service Broker for PCF) does, 
-whereas the Overview section below describes what the service itself (e.g. Apigee Edge) does. See below for an example.**
+This documentation describes the Zettaset XCrypt Full Disk for Pivotal Cloud Foundry (PCF) tile. Zettaset XCrypt Full Disk for PCF enables disk-level encryption for all nodes in your PCF deployment. Developers can encrypt entire disks or specific partitions, extend encryption to new nodes, rotate keys, and remove encryption as needed. 
 
-This documentation describes the Apigee Edge Service Broker for Pivotal Cloud Foundry (PCF). The Apigee Edge Service 
-Broker for PCF enables developers to manage APIs for their PCF apps through the Apigee Edge management console.
+Zettaset's Virtual Enterprise Key Manager (V-EKM) and Virtual Hardware Security Module (V-HSM) are available, separately, as scalable, software-based key management and hsm solutions that are fully integrated with XCrypt Full Disk. 
 
-**Note**: This description will appear under **OVERVIEW** in the tile's listing on 
-[Pivotal Network](http://network.pivotal.io).
 
 ## <a id='overview'></a>Overview
 
-**The overview describes the service that your product offers to Greenplum users/developers. 
-Make sure to overview the features of the integration.
-Don't focus only on the overview of your product that is being integrated.
-See below for an example.**
+XCrypt Full Disk is a high-performance, infinitely scalable, full disk encryption solution which is ideal for bulk encryption of stored data. Zettaset’s all-software approach to encryption simplifies deployment and eliminates the need for proprietary appliances. It also makes all Zettaset encryption solutions, including XCrypt Full Disk, ideal for PCF.
 
-The Apigee Edge Service Broker for PCF registers a service broker with PCF and exposes its service plans on the 
-Marketplace. Developers can then create service plan instances using Apps Manager or the Cloud Foundry Command 
-Line Interface (cf CLI) and bind them to their apps.
+XCrypt Full Disk utilizes Advanced Encryption Standard (AES) 256-bit encryption, the highest level attainable. AES has been adopted by the U.S. government and is now used worldwide. It also provides AES-NI accelerated performance in equipped servers.
 
-Creating an Apigee Edge for PCF service instance and binding it to an app creates an Apigee Edge API proxy that 
-handles requests for the app. This lets developers use the Apigee Edge management console to manage API request 
-handling between clients and the app.
+XCrypt Full Disk provides proven defense in regulated industries such as healthcare, financial services, and retail from the accelerating frequency and scope of data breaches. When integrated into a strategic IT security initiative, XCrypt Full Disk can help bring structured and unstructured data stores into compliance with corporate and regulatory data protection initiatives including PCI/DSS, HIPAA, FISMA, and GDPR.
 
-**Note**: This overview will appear under **OVERVIEW**, combined with the description above in the tile's listing on 
-[Pivotal Network](http://network.pivotal.io).
 
 ## <a id='features'></a>Key Features
 
-**Note**: This feature list will appear under **FEATURES** in the tile's listing on 
-[Pivotal Network](http://network.pivotal.io). 
-Make sure you list the key features of the tile (the integration). 
-We cannot accept a list of the key features of your product that we are integrating.
+Zettaset XCrypt Full Disk includes the following key features:
 
-YOUR-PRODUCT-NAME includes the following key features:
+* All-software solution simplifies deployment, easily scales, and delivers exceptional price/performance
+* Optimized for superior performance in scale-out distributed computing systems, with near-zero latency: approximately 3%* when measured using TeraSort MapReduce Benchmark.
+* Proven protection for high-volume, high-growth cloud and on-premises data environments
+* Provides a proven defense for sensitive data in regulated industries such healthcare, financial services, and retail from the accelerating frequency and scope of data breaches. Supports corporate and regulatory compliance initiatives including PCI/DSS, HIPAA, FISMA, and GDPR.
 
-* Feature one
-* Feature two
-* Feature three
 
+* Interoperability Certifications
 
 
 ## <a id="snapshot"></a>Product Snapshot
 
-The following table provides version and version-support information about PRODUCT-NAME.
+The following table provides version and version-support information about Zettaset XCrypt Full Disk.
 
 <table class="nice">
     <th>Element</th>
     <th>Details</th>
     <tr>
         <td>Tile version</td>
-        <td>vYOUR-VERSION-NUMBER</td>
+        <td>v1.0</td>
     </tr>
     <tr>
         <td>Release date</td>
-        <td>YOUR-RELEASE-DATE (Ex: July 1, 2017)</td>
+        <td>July 1, 2018</td>
     </tr>
     <tr>
         <td>Software component version</td>
-        <td>vYOUR-SOFTWARE-COMPONENT-VERSION-NUMBER</td>
+        <td>v8.4.0</td>
     </tr>
     <tr>
         <td>Compatible Greenplum version(s)</td>
-        <td>vYOUR-COMPATIBLE-OPS-MAN-VERSION (Ex. v1.11.x, v1.12.x, and v2.0.x)</td>
+        <td>v1.11.x, v1.12.x, and v2.0.x</td>
     </tr>
     <tr>
         <td>Compatible Pivotal Application Service (formerly known as Elastic Runtime) version(s)</td>
-        <td>vYOUR-COMPATIBLE-PIVOTAL-APPLICATION-SERVICE-VERSION (Ex. v1.11.x, v1.12.x, and v2.0.X)</td>
+        <td>v1.11.x, v1.12.x, and v2.0.X</td>
     </tr>
     <tr>
         <td>IaaS support</td>
-        <td>AWS?, Azure?, GCP?, OpenStack?, and vSphere?</td>
+        <td>AWS, Azure, GCP, OpenStack, and vSphere</td>
     </tr>
     <tr>
         <td>IPsec support?</td>
-        <td>[Yes or No]</td>
+        <td>Yes</td>
     </tr>
 </table>
 * As of PCF v2.0, <em>Elastic Runtime</em> is renamed <em>Pivotal Application Service (PAS)</em>. 
 
 ## <a id="reqs"></a>Requirements
 
-**Provide any general or specific requirements, prerequisites, or dependencies here. 
-A general requirement might be something like, "An AppDynamics account." 
-A specific requirement might be something like, "Packaging Dependencies for Offline Buildpacks."**
+Zettaset XCrypt Full Disk has the following requirements:
 
-YOUR-PRODUCT-NAME has the following requirements:
++ java 1.7.0 or greater
 
-+ PREREQUISITE-1
++ Java Cryptography Extension (JCE) Unlimited Strength Juridiction Policy files
 
-+ PREREQUISITE-2
++ libselinux-python and cryptsetup-luks
 
-## <a id="limitations"></a>Limitations
++ wget
 
-**List any known limitations.**
++ nss version 3.21 or greater
 
-## <a id="feedback"></a>Feedback
++ xfsprogs and xfsdump, when using the xfs file system
 
-If you have a feature request, questions, or information about a bug, please email
-[Pivotal Cloud Foundry Feedback](mailto:cf-feedback@pivotal.io) list or send an email to YOUR-SUPPORT-EMAIL.
++ Zettaset Virtual Enterprise Key Manager (V-EKM). To download V-EKM, contact our [sales team](mailto:sales@zettaset.com).
+
+
+## <a id="feedback"></a>Feedback and Support
+
+At Zettaset our goal is to ensure a positive, consistent, and successful customer experience with each one of our software security solutions. As part of our on-going commitment, Zettaset offers a world-class customer service and support program to effectively complement our industry-leading family of big data encryption and key management solutions.
+
+Every aspect of our customer service and support program is staffed by expert, highly-trained engineers who have years of experience with Zettaset security solutions as well as a deep domain experience around encryption, key management, access control, authentication, cloud security, multiple database environments, and compliance requirements.
+
+If you have a feature request, question, or information about a bug, please email
+[our support team](mailto:support@zettaset.com).
 
 ## <a id='license'></a>License
 
-**List any license information here.**
+Contact our [sales team](mailto:sales@zettaset.com) to learn more about commercial licenses and support. 
