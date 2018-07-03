@@ -72,7 +72,6 @@ Perform the following steps on the installer node:
     ```      
     $ mkfs.ext4 /dev/sdc1                          # create a file system sdc1
     $ mkdir -p /var/lib/zts/slave/crypt1           # makes the linux dir
-    $ mount /dev/sdc1 /var/lib/zts/slave/crypt1    # mounts the partition
     ```
 
     ext3, ext4, and xfs file systems are supported. Be sure that your desired file system is installed on your target node before installing XCrypt Full Disk (e.g., xfs is not always available by default).
@@ -86,7 +85,7 @@ The inventory file (hosts.inv) sets the configuration properties used for the in
 **All Nodes**
 
 ```
-node01 encrypted_blockdev=/dev/sdc1 encrypted_mountpoint=/crypt1 encrypted_mountnames=crypt1 encrypted_preserve=y fstype=ext4 newfsargs=none kmip_client_jks=/opt/node01.jks kmip_client_jks_passwd="1234"
+node01 encrypted_blockdev=/dev/sdc1 encrypted_mountpoint=/crypt1 encrypted_mountnames=crypt1 encrypted_preserve=n fstype=ext4 newfsargs=none kmip_client_jks=/opt/node01.jks kmip_client_jks_passwd="1234"
 
 node02 encrypted_blockdev=/dev/sdc1 encrypted_mountpoint=/crypt1 encrypted_mountnames=crypt1 encrypted_preserve=n fstype=ext4 newfsargs=none kmip_client_jks=/opt/node02.jks kmip_client_jks_passwd="1234"
 
