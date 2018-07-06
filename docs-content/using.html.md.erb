@@ -5,7 +5,7 @@ owner: Partners
 
 This topic describes how to use Zettaset XCrypt Full Disk.
 
-## <a id='encrypting_additional_nodes'>Encrypting Additional Nodes</a>
+## <a id='encrypting_additional_nodes'></a>Encrypting Additional Nodes
 
 After installing Zettaset XCrypt Full Disk, you may want to encrypt additional nodes in your environment.
 
@@ -25,7 +25,7 @@ To encrypt additional nodes:
     $ ./install_zts-xcrypt-full-disk.sh -vv -t add -i hosts.inv install
     ``` 
 
-## <a id='encrypting_additional_partitions'>Encrypting Additional Partitions</a>
+## <a id='encrypting_additional_partitions'></a>Encrypting Additional Partitions
 
 After installing Zettaset XCrypt Full Disk on a node, you may want to encrypt additional partitions. Do this on the target node itself, there is no need to re-run the installer.
 
@@ -81,7 +81,7 @@ To encrypt additional partitions:
    │ └─crypt4 (dm-5)    ext4           202M    /var/lib/zts/slave/crypt4
     ```
 
-## <a id='unmounting_partitions'>Unmounting Partitions</a>
+## <a id='unmounting_partitions'></a>Unmounting Partitions
 
 To unmount all encrypted partitions on a node:
 
@@ -91,7 +91,7 @@ To unmount all encrypted partitions on a node:
     $ /usr/share/zts/bin/luks_mount.sh unmount
     ``` 
 
-## <a id='key_rotation'>Key Rotation</a>
+## <a id='key_rotation'></a>Key Rotation
 
 You should periodically change encryption keys, in accordance with your organization's security policy. Key rotation can be done while the encrypted partitions are in use.
 
@@ -121,7 +121,7 @@ You should periodically change encryption keys, in accordance with your organiza
    /dev/sdb6    /var/lib/zts/slave/crypt2    crypt2         e245-af70-4e6f
     ``` 
 
-## <a id='removing_encryption'>Removing Encryption</a>
+## <a id='removing_encryption'></a>Removing Encryption
 
 To undo encryption, you will first need to back up the data while the encrypted partition is mounted.
 
@@ -158,9 +158,10 @@ To undo encryption, you will first need to back up the data while the encrypted 
 
 1. Copy your backup to the mount location.
 
-## <a id='removing_partitions'>Removing Non-Functioning Encrypted Partitions</a>
+## <a id='removing_partitions'></a>Removing Non-Functioning Encrypted Partitions
 
-In the event that a partition is no longer functioning, because of a disk failure, for example, you can remove the encrypted partition from the Zettaset XCrypt Full Disk configuration on that node. Once removed, the partition will no longer be mounted. These instructions assume that the data on the partition is no longer accessible.
+In the event that a partition is no longer functioning, because of a disk failure for example, you can remove the encrypted partition from the Zettaset XCrypt Full Disk configuration on that node. Once removed, the partition will no longer be mounted. These instructions assume that the data on the partition is no longer accessible.
+
 
 To remove the partition:
 

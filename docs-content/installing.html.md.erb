@@ -5,7 +5,7 @@ owner: Partners
 
 This topic describes how to install and configure Zettaset XCrypt Full Disk.
 
-##<a id='install'>Install the Zettaset XCrypt Full Disk Tile</a>
+##<a id='install'></a>Install the Zettaset XCrypt Full Disk Tile
 
 To install the Zettaset XCrypt Full Disk tile on the Ops Manager Installation Dashboard, do the following:
 
@@ -20,7 +20,7 @@ This adds the tile to your staging area.
 
 1. Proceed to [Configuring the Installer Node](#configuring_installer). 
 
-## <a id='configuring_installer'>Configuring the Installer Node</a>
+## <a id='configuring_installer'></a>Configuring the Installer Node
 
 Perform the following steps on the installer node:
 
@@ -78,7 +78,7 @@ Perform the following steps on the installer node:
 
 1. Proceed to [Configuring the Inventory File](#configuring_inv). 
 
-## <a id='configuring_inv'>Configuring the Inventory File</a>
+## <a id='configuring_inv'></a>Configuring the Inventory File
 
 The inventory file (hosts.inv) sets the configuration properties used for the installation. An annotated sample file (hosts.inv.pivnet) is included with the Zettaset software. The sections of this file are explained below.
 
@@ -107,7 +107,7 @@ List each node in your deployment using hostnames or IP addresses. For each node
 * `kmip_client_jks_passwd` - The password used to access the Java KeyStore. Enclose your value in quotes: "somePassword".
 
 
-When encrypting multiple partitions on a node, use commas to separate values. For newfsargs, use colons to separate values and include values for all settings, even if that value is 'none'. For example,
+When encrypting multiple partitions on a node, use commas to separate values. For newfsargs, use colons to separate values and include values for all settings, even if that value is 'none'. For example:
 ```
 node01 encrypted_blockdev=/dev/sdd,/dev/sde encrypted_mountpoint=/crypt1,/crypt2 encrypted_mountnames=crypt1,crypt2 encrypted_preserve=y,n fstype=ext4,xfs newfsargs=none:"-b size=2048 -d su=64k,sw=4" kmip_client_jks=/opt/some.jks kmip_client_jks_passwd="1234"
 ```
@@ -169,7 +169,7 @@ The bracketed values indicate the function a node will have in the deployment. B
 
 Once the inventory file is configured, you are ready to install the product. If you need to zeroize data on a partition prior to encrypting, proceed to [Manually Zeroizing Old Data](#zeroizing), below. Otherwise, proceed to [Installing Zettaset XCrypt Full Disk](#installing).
 
-## <a id='zeroizing'>Manually Zeroizing Old Data</a>
+## <a id='zeroizing'></a>Manually Zeroizing Old Data
 
 For each partition where you are not preserving existing data (where `encrypted_preserve=n`) and which previously held sensitive data, the partition should be wiped before being encrypted. Otherwise, some blocks may not be overwritten with encrypted data right away and could be recovered. 
 
@@ -189,7 +189,7 @@ $ wipefs /dev/sdb1
 $ cat /dev/zero > /dev/sdb1
 ```
 
-## <a id='installing'>Installing Zettaset XCrypt Full Disk</a>
+## <a id='installing'></a>Installing Zettaset XCrypt Full Disk
 
 The installer sends the Zettaset XCrypt Full Disk libraries and configuration files to each target node. It also encrypts the nodes and partitions listed in the hosts.inv file. 
 
