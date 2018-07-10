@@ -5,7 +5,8 @@ owner: Partners
 
 This topic describes how to install and configure Zettaset XCrypt Full Disk.
 
-##<a id='install'></a>Install the Zettaset XCrypt Full Disk Tile
+
+##<a id='install'></a> Install the Zettaset XCrypt Full Disk Tile
 
 To install the Zettaset XCrypt Full Disk tile on the Ops Manager Installation Dashboard, do the following:
 
@@ -20,65 +21,59 @@ This adds the tile to your staging area.
 
 1. Proceed to [Configuring the Installer Node](#configuring_installer). 
 
-## <a id='configuring_installer'></a>Configuring the Installer Node
 
-Perform the following steps on the installer node:
+## <a id='configuring_installer'></a> Configuring the Installer Node
 
-1. Establish ssh trust between the installer node and all target nodes. This prevents errors when running ssh commands. To create ssh trust:
-    * Generate an ssh key for the installer, if one doesn't already exist.
+On the installer node, do the following:
 
+1. Establish SSH trust between the installer node and all target nodes. This prevents errors when running SSH commands. To create SSH trust:
+    1. Generate an ssh key for the installer, if one doesn't already exist.
     ``` 
        $ ssh-keygen
     ``` 
-    * Distribute the key to each target node.
-
-       ```
-       $ ssh-copy-id root@<node01>
-       $ ssh-copy-id root@<node02>
-       ...
-       ```
+    1. Distribute the key to each target node.
+    ```
+    $ ssh-copy-id root@<node01>
+    $ ssh-copy-id root@<node02>
+    ...
+    ```
 
 1. Install ansible on the installer node. This requires the Extra Packages for Enterprise Linux (epel-release) package.
-
-    ``` 
+   ``` 
    $ yum install epel-release -y
    $ yum install ansible -y
    $ ansible --version
-    ``` 
+   ``` 
 
 1. Install the Zettaset archive file.
-
-    ``` 
-    $ scp -P 22 zts-XCryptFullDisk-8.4.0.tar.gz root@node01.public.local:/opt
-    ``` 
+   ``` 
+   $ scp -P 22 zts-XCryptFullDisk-8.4.0.tar.gz root@node01.public.local:/opt
+   ``` 
 
 1. Extract the archive.
-
-    ```
-    $ ssh node01.public.local
-    $ cd /opt
-    $ tar zxvf zts-XCryptFullDisk-8.4.0.tar.gz
-    ```
+   ```
+   $ ssh node01.public.local
+   $ cd /opt
+   $ tar zxvf zts-XCryptFullDisk-8.4.0.tar.gz
+   ```
 
 1. Copy hosts.inv.example to hosts.inv.
+   ```
+   $ cd /opt/zettaset/XCryptFullDisk/8.4.0
+   $ cp hosts.inv.example hosts.inv
+   ```
 
-    ```
-    $ cd /opt/zettaset/XCryptFullDisk/8.4.0
-    $ cp hosts.inv.example hosts.inv
-    ```
-
-1. When testing this product, you might want to configure the following partitions and mount points on a test node. This will be the encrypted partition. Instructions in a later section illustrate how to use these specific partitions. ssh to the data nodes in your cluster and execute the following commands:
-
-    ```      
-    $ mkfs.ext4 /dev/sdc1                          # create a file system sdc1
-    $ mkdir -p /var/lib/zts/slave/crypt1           # makes the linux dir
-    ```
-
-    ext3, ext4, and xfs file systems are supported. Be sure that your desired file system is installed on your target node before installing XCrypt Full Disk (e.g., xfs is not always available by default).
+1. When testing this product, you might want to configure the following partitions and mount points on a test node. This will be the encrypted partition. Instructions in a later section illustrate how to use these specific partitions. SSH to the data nodes in your cluster and run the following commands:
+   ```      
+   $ mkfs.ext4 /dev/sdc1                          # create a file system sdc1
+   $ mkdir -p /var/lib/zts/slave/crypt1           # makes the linux dir
+   ```
+   ext3, ext4, and xfs file systems are supported. Be sure that your desired file system is installed on your target node before installing XCrypt Full Disk (e.g., xfs is not always available by default).
 
 1. Proceed to [Configuring the Inventory File](#configuring_inv). 
 
-## <a id='configuring_inv'></a>Configuring the Inventory File
+
+## <a id='configuring_inv'></a> Configuring the Inventory File
 
 The inventory file (hosts.inv) sets the configuration properties used for the installation. An annotated sample file (hosts.inv.pivnet) is included with the Zettaset software. The sections of this file are explained below.
 
@@ -101,13 +96,13 @@ List each node in your deployment using hostnames or IP addresses. For each node
     * **y** - Preserves existing data. The file system must be mounted before the install. If the partition is not mounted, the data will be overwritten. The partition must also be unmountable. If a process prevents the unmount, encryption cannot start. Only ext file systems can be preserved. 
     * **n** - Does not preserve existing data. The partition must be unmounted.
     * **w** - Securely wipes the partition before the new encrypted file system is created. The partition must be unmounted.
-* `fstype` - Must be set to the type of file system to make when `encrypted_preserve` is y or w . Must be set to the existing file system type when `encrypted_preserve=n`. Typical file system types include ext4 and xfs.
-* `newfsargs` - A string of arguments to pass to the mkfs command. If there are spaces between multiple arguments, surround the string in double quotes (i.e., "-b size 2048"). When no arguments are to be passed, set this value to 'none'.
-* `kmip_client_jks` - Location and filename of the Java KeyStore containing the client key and certificate that enables this node to communicate with your key manager. The jks must be local to the installer node. 
-* `kmip_client_jks_passwd` - The password used to access the Java KeyStore. Enclose your value in quotes: "somePassword".
+* `fstype` - Must be set to the type of file system to make when `encrypted_preserve` is y or w. Must be set to the existing file system type when `encrypted_preserve=n`. Typical file system types include `ext4` and `xfs`.
+* `newfsargs` - A string of arguments to pass to the `mkfs` command. If there are spaces between multiple arguments, surround the string in double quotes (i.e., "-b size 2048"). When no arguments are to be passed, set this value to `none`.
+* `kmip_client_jks` - Location and filename of the Java KeyStore containing the client key and certificate that enables this node to communicate with your key manager. The Java KeyStore must be local to the installer node. 
+* `kmip_client_jks_passwd` - The password used to access the Java KeyStore. Enclose your value in quotes: `"somePassword"`.
 
 
-When encrypting multiple partitions on a node, use commas to separate values. For newfsargs, use colons to separate values and include values for all settings, even if that value is 'none'. For example:
+When encrypting multiple partitions on a node, use commas to separate values. For newfsargs, use colons to separate values and include values for all settings, even if that value is `none`. For example:
 ```
 node01 encrypted_blockdev=/dev/sdd,/dev/sde encrypted_mountpoint=/crypt1,/crypt2 encrypted_mountnames=crypt1,crypt2 encrypted_preserve=y,n fstype=ext4,xfs newfsargs=none:"-b size=2048 -d su=64k,sw=4" kmip_client_jks=/opt/some.jks kmip_client_jks_passwd="1234"
 ```
@@ -169,7 +164,8 @@ The bracketed values indicate the function a node will have in the deployment. B
 
 Once the inventory file is configured, you are ready to install the product. If you need to zeroize data on a partition prior to encrypting, proceed to [Manually Zeroizing Old Data](#zeroizing), below. Otherwise, proceed to [Installing Zettaset XCrypt Full Disk](#installing).
 
-## <a id='zeroizing'></a>Manually Zeroizing Old Data
+       
+## <a id='zeroizing'></a> Manually Zeroizing Old Data
 
 For each partition where you are not preserving existing data (where `encrypted_preserve=n`) and which previously held sensitive data, the partition should be wiped before being encrypted. Otherwise, some blocks may not be overwritten with encrypted data right away and could be recovered. 
 
@@ -189,26 +185,24 @@ $ wipefs /dev/sdb1
 $ cat /dev/zero > /dev/sdb1
 ```
 
-## <a id='installing'></a>Installing Zettaset XCrypt Full Disk
+
+## <a id='installing'></a> Installing Zettaset XCrypt Full Disk
 
 The installer sends the Zettaset XCrypt Full Disk libraries and configuration files to each target node. It also encrypts the nodes and partitions listed in the hosts.inv file. 
 
 1. Perform a sanity check on the inventory file. This will confirm that the settings in your file are valid.
-
     ```
     $ cd /opt/zettaset/8.4.0/XCryptFullDisk 
     $ ./install_zts-xcrypt-full-disk.sh -vv -i hosts.inv check
     ```
 
-1. Run the installer. This will establish secure connectivity between all nodes and services, and encrypt partitions. 
-
+1. Run the installer. This will establish secure connectivity between all nodes and services, and encrypt partitions.
     ```
     $ cd /opt/zettaset/8.4.0/XCryptFullDisk
     $ ./install_zts-xcrypt-full-disk.sh -vv -i hosts.inv install
     ```
 
-1. View each target node's block devices to confirm partition encryption. Your output will reflect your partitions. 
-
+1. View each target node's block devices to confirm partition encryption. Your output will reflect your partitions.
     ```
     $ ssh node01 "lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT"
     NAME               FSTYPE         SIZE    MOUNTPOINT
@@ -218,7 +212,6 @@ The installer sends the Zettaset XCrypt Full Disk libraries and configuration fi
     ```
 
 1. View the encryption keys by viewing cryptinittab on the target node:
-
     ```
     $ ssh node01 "cat /etc/zts/conf.default/cryptinittab"
     partition    mount point                  mapper name    key name
@@ -227,6 +220,4 @@ The installer sends the Zettaset XCrypt Full Disk libraries and configuration fi
 
 1. Review install.log when needed.
 
-1. Remove any hsm pin values from the hosts.inv file.
-
-
+1. Remove any HSM PIN values from the hosts.inv file.
