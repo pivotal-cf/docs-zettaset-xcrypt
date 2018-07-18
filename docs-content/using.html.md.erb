@@ -5,73 +5,64 @@ owner: Partners
 
 This topic describes how to use Zettaset XCrypt Full Disk.
 
-## <a id='encrypting_additional_nodes'>Encrypting Additional Nodes</a>
+
+## <a id='encrypting_additional_nodes'></a> Encrypting Additional Nodes
 
 After installing Zettaset XCrypt Full Disk, you may want to encrypt additional nodes in your environment.
 
-To encrypt additional nodes:
+To encrypt additional nodes, do the following:
 
 1. Edit hosts.inv on the installer node. 
     1. Add the new nodes to the `ALL NODES` section. Be sure to leave the old entries. Use the `encrypted_blockdev`, `encrypted_mountpoint`, `encrypted_mountnames`, `encrypted_preserve`, `fstype`, and `newfsargs` variables to configure the encryption. Use the other variables as needed.
-
     1. Comment out the old nodes in the `[slave]` section.
-
     1. Add the new nodes to the `[slave]` section. Use either the hostnames or IP addresses.
 
 1. Run the installation script, using `-t add`.
-
     ``` 
     $ cd /opt/zettaset/8.4.0/XCryptFullDisk
     $ ./install_zts-xcrypt-full-disk.sh -vv -t add -i hosts.inv install
     ``` 
 
-## <a id='encrypting_additional_partitions'>Encrypting Additional Partitions</a>
+
+## <a id='encrypting_additional_partitions'></a> Encrypting Additional Partitions
 
 After installing Zettaset XCrypt Full Disk on a node, you may want to encrypt additional partitions. Do this on the target node itself, there is no need to re-run the installer.
 
 To encrypt additional partitions:
 
 1. Create a new file system on the partition.
-
     ``` 
     $ mkfs.ext4 /dev/sdb8
     ``` 
 
 1. Create the mount point.
-
     ``` 
     $ mkdir -p /var/lib/zts/slave/crypt4
     ``` 
 
 1. Mount the partition only when preserving data.
-
     ``` 
     $ mount /dev/sdb8 /var/lib/zts/slave/crypt4
     ``` 
 
 1. Use luks_setup.sh to encrypt the partition.
-
     ``` 
     $ /usr/share/zts/bin/luks_setup.sh -fstype <fstype> -newfsargs <fsargs>  y|n|w <partition> <mapper> <mountpoint>
     ``` 
     * **y** - Preserves the existing data. The file system must be mounted before the install. If the partition is not mounted, the data will be overwritten. The partition must also be unmountable. If a process prevents the unmount, encryption cannot start. Only ext file systems can be preserved.
     * **n** - Does not preserve the existing data. The partition must be unmounted.
     * **w** - Wipes the existing data. The partition must be unmounted.
-
     For example:
-
     ``` 
     $ /usr/share/zts/bin/luks_setup.sh -fstype ext4 -newfsargs '-b size=2048 -d su=64k,sw=4' y /dev/sdb8 crypt4 /var/lib/zts/slave/crypt4
     ``` 
 
 1. Use luks_mount.sh to remount the partition.
-
     ``` 
     $ /usr/share/zts/bin/luks_mount.sh
     ``` 
 
 1. View the block devices to confirm the partition encryption.
-
     ```
    $ ssh node01 "lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT"
    NAME                 FSTYPE         SIZE    MOUNTPOINT
@@ -81,22 +72,22 @@ To encrypt additional partitions:
    │ └─crypt4 (dm-5)    ext4           202M    /var/lib/zts/slave/crypt4
     ```
 
-## <a id='unmounting_partitions'>Unmounting Partitions</a>
 
-To unmount all encrypted partitions on a node:
+## <a id='unmounting_partitions'></a> Unmounting Partitions
+
+To unmount all encrypted partitions on a node, do the following:
 
 1. Use luks_mount.sh to unmount all encrypted partitions on a node.
-
     ``` 
     $ /usr/share/zts/bin/luks_mount.sh unmount
     ``` 
 
-## <a id='key_rotation'>Key Rotation</a>
+
+## <a id='key_rotation'></a> Key Rotation
 
 You should periodically change encryption keys, in accordance with your organization's security policy. Key rotation can be done while the encrypted partitions are in use.
 
 1. View the current keys by viewing cryptinittab on the target node.
-
     ``` 
    $ cat /etc/zts/conf.default/cryptinittab
    partition    mount point                  mapper name    key name
@@ -105,15 +96,12 @@ You should periodically change encryption keys, in accordance with your organiza
     ``` 
 
 1. Use luks_rotate.sh to create and apply a new key.
-
     ``` 
     $ /usr/share/zts/bin/luks_rotate.sh
     ``` 
-
     New keys are generated and applied to each encrypted partition on the host. The old keys are deleted from the key server.
 
 1. View the new keys in cryptinittab.
-
     ``` 
    $ cat /etc/zts/conf.default/cryptinittab
    partition    mount point                  mapper name    key name
@@ -121,12 +109,12 @@ You should periodically change encryption keys, in accordance with your organiza
    /dev/sdb6    /var/lib/zts/slave/crypt2    crypt2         e245-af70-4e6f
     ``` 
 
-## <a id='removing_encryption'>Removing Encryption</a>
+
+## <a id='removing_encryption'></a> Removing Encryption
 
 To undo encryption, you will first need to back up the data while the encrypted partition is mounted.
 
 1. Read the list of encrypted partitions.
-
     ``` 
    $ cat /etc/zts/conf.default/cryptinittab
    partition     mount point                  mapper name    key name
@@ -136,13 +124,11 @@ To undo encryption, you will first need to back up the data while the encrypted 
 1. Back up the data.
 
 1. Unmount the file system.
-
     ``` 
     $ umount /var/lib/zts/slave/crypt4
     ``` 
 
 1. Unmap the encrypted partition.
-
     ``` 
     $ cryptsetup remove crypt4
     ``` 
@@ -150,7 +136,6 @@ To undo encryption, you will first need to back up the data while the encrypted 
 1. Edit /etc/zts/conf.default/cryptinittab and remove the partition entry.
 
 1. Make a new file system on the partition and mount it.
-
     ``` 
    $ mkfs.ext4 /dev/sdb10
    $ mount /dev/sdb10 /var/lib/zts/slave/crypt4
@@ -158,28 +143,26 @@ To undo encryption, you will first need to back up the data while the encrypted 
 
 1. Copy your backup to the mount location.
 
-## <a id='removing_partitions'>Removing Non-Functioning Encrypted Partitions</a>
 
-In the event that a partition is no longer functioning, because of a disk failure, for example, you can remove the encrypted partition from the Zettaset XCrypt Full Disk configuration on that node. Once removed, the partition will no longer be mounted. These instructions assume that the data on the partition is no longer accessible.
+## <a id='removing_partitions'></a> Removing Non-Functioning Encrypted Partitions
 
-To remove the partition:
+In the event that a partition is no longer functioning, because of a disk failure for example, you can remove the encrypted partition from the Zettaset XCrypt Full Disk configuration on that node. Once removed, the partition will no longer be mounted. These instructions assume that the data on the partition is no longer accessible.
+
+To remove the partition, do the following:
 
 1. Establish an ssh connection to the node with the failed partition. 
 
 1. Stop the encryption service.
-
     ``` 
     $ service zts-encrypt stop
     ``` 
 
 1. Make a backup copy of the cryptinittab file.
-
     ``` 
     $ cp /etc/zts/conf.default/cryptinittab /etc/zts/conf.default/cryptinittab.bkp
     ``` 
 
 1. Remove the partition from the current cryptinittab file.
-
     ``` 
     $ vi /etc/zts/conf.default/cryptinittab
     partition     mount point                  mapper name   key name
@@ -188,12 +171,8 @@ To remove the partition:
     ``` 
 
 1. Start the encryption service.
-
     ``` 
     $ service zts-encrypt start
     ``` 
 
 1. Follow the directions in [Encrypting Additional Partitions](#encrypting_additional_partitions) when encrypting the replacement partitions.
-
-
-
