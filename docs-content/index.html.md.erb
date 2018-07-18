@@ -3,16 +3,15 @@ title: Zettaset XCrypt Full Disk for Pivotal Data Suite
 owner: Partners
 ---
 
-<p class="note warning"><strong>WARNING:</strong> The Zettaset XCrypt Full Disk for Pivotal Data Suite (PDS) tile is intended for evaluation and test purposes only. Do not use this product in a PCF production environment.</p>
 
-This documentation describes the Zettaset XCrypt Full Disk for Pivotal Data Suite tile. Zettaset XCrypt Full Disk for PDS enables disk-level encryption for all nodes in your deployment. Developers can encrypt entire disks or specific partitions, extend encryption to new nodes, rotate keys, and remove encryption as needed. 
+This documentation describes Zettaset XCrypt Full Disk for Pivotal Data Suite. Zettaset XCrypt Full Disk for PDS enables disk-level encryption for all nodes in your deployment of Pivotal Greenplum and Pivotal GemFire. Developers can encrypt entire disks or specific partitions, extend encryption to new nodes, rotate keys, and remove encryption as needed. 
 
 Zettaset's Virtual Enterprise Key Manager (V-EKM) and Virtual Hardware Security Module (V-HSM) are available, separately, as scalable, software-based key management and HSM solutions that are fully integrated with XCrypt Full Disk. 
 
 
 ## <a id='overview'></a> Overview
 
-XCrypt Full Disk is a high-performance, infinitely scalable, full disk encryption solution which is ideal for bulk encryption of stored data. Zettaset's all-software approach to encryption simplifies deployment and eliminates the need for proprietary appliances. It also makes all Zettaset encryption solutions, including XCrypt Full Disk, ideal for use with Pivotal Data products.
+XCrypt Full Disk is a high-performance, infinitely scalable, full disk encryption solution which is ideal for bulk encryption of stored data. Zettaset's all-software approach to encryption simplifies deployment and eliminates the need for proprietary appliances. It also makes all Zettaset encryption solutions, including XCrypt Full Disk, ideal for use with Pivotal Greenplum and Pivotal GemFire.
 
 XCrypt Full Disk utilizes Advanced Encryption Standard (AES) 256-bit encryption, the highest level attainable. AES has been adopted by the U.S. government and is now used worldwide. It also provides AES-NI accelerated performance in equipped servers.
 
@@ -39,7 +38,7 @@ The following table provides version and version-support information about Zetta
     <th>Element</th>
     <th>Details</th>
     <tr>
-        <td>Tile version</td>
+        <td>Plugin version</td>
         <td>v1.0</td>
     </tr>
     <tr>
@@ -52,7 +51,11 @@ The following table provides version and version-support information about Zetta
     </tr>
     <tr>
         <td>Compatible Greenplum version(s)</td>
-        <td>v1.11.x, v1.12.x, and v2.0.x</td>
+        <td>v3.x, v4.x, and v5.x</td>
+    </tr>
+    <tr>
+        <td>Compatible GemFire version(s)</td>
+        <td>v8.x and upwards</td>
     </tr>
     <tr>
         <td>Compatible Pivotal Application Service (formerly known as Elastic Runtime) version(s)</td>
@@ -78,12 +81,6 @@ Zettaset XCrypt Full Disk has the following requirements:
 + Java Cryptography Extension (JCE) Unlimited Strength Juridiction Policy files
 
 + libselinux-python and cryptsetup-luks
-
-+ wget
-
-+ nss version v3.21 or greater
-
-+ xfsprogs and xfsdump, when using the XFS file system
 
 + Zettaset Virtual Enterprise Key Manager (V-EKM). To download V-EKM, contact our [sales team](mailto:sales@zettaset.com).
 
