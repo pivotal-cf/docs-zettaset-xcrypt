@@ -6,20 +6,11 @@ owner: Partners
 This topic describes how to install and configure Zettaset XCrypt Full Disk.
 
 
-##<a id='install'></a> Install the Zettaset XCrypt Full Disk Tile
+##<a id='install'></a> Install Zettaset XCrypt Full Disk
 
-To install the Zettaset XCrypt Full Disk tile on the Ops Manager Installation Dashboard, do the following:
+Your Greenplum and Pivotal Gemfire primary, seconday, and segment nodes should be installed prior to installing Zettaset XCrypt Full Disk. Once Greenplum and Pivotal Gemfire have been successfully installed, install Zettaset XCrypt Full Disk on all segment nodes that hold data volumes. After the Zettaset installation, data can be populated on the data volumes. 
 
-1. Download the product file from Pivotal Network.
-
-1. Navigate to the Ops Manager Installation Dashboard and click **Import a Product** to upload the product file. 
-
-1. Under the **Import a Product** button, click **+** next to the version number of Zettaset XCrypt Full Disk. 
-This adds the tile to your staging area.
-
-1. Click the newly added **Zettaset XCrypt Full Disk** tile.
-
-1. Proceed to [Configuring the Installer Node](#configuring_installer). 
+For existing Greenplum and Pivotal Gemfire environments, data must be backed up prior to the Zettaset XCrypt Full Disk installation. After the Zettaset installation, data can be restored to the data volumes. 
 
 
 ## <a id='configuring_installer'></a> Configuring the Installer Node
@@ -27,48 +18,54 @@ This adds the tile to your staging area.
 On the installer node, do the following:
 
 1. Establish SSH trust between the installer node and all target nodes. This prevents errors when running SSH commands. To create SSH trust:
-    1. Generate an ssh key for the installer, if one doesn't already exist.
-    ``` 
-       $ ssh-keygen
-    ``` 
+    1. Generate an SSH key for the installer, if one doesn't already exist.
+
+        ``` 
+           $ ssh-keygen
+        ``` 
     1. Distribute the key to each target node.
-    ```
-    $ ssh-copy-id root@<node01>
-    $ ssh-copy-id root@<node02>
-    ...
-    ```
+
+        ```
+        $ ssh-copy-id root@<node01>
+        $ ssh-copy-id root@<node02>
+        ...
+        ```
 
 1. Install ansible on the installer node. This requires the Extra Packages for Enterprise Linux (epel-release) package.
-   ``` 
-   $ yum install epel-release -y
-   $ yum install ansible -y
-   $ ansible --version
-   ``` 
+
+    ``` 
+    $ yum install epel-release -y
+    $ yum install ansible -y
+    $ ansible --version
+    ```
 
 1. Install the Zettaset archive file.
-   ``` 
-   $ scp -P 22 zts-XCryptFullDisk-8.4.0.tar.gz root@node01.public.local:/opt
-   ``` 
+    ``` 
+    $ scp -P 22 zts-XCryptFullDisk-8.4.0.tar.gz root@node01.public.local:/opt
+    ``` 
 
 1. Extract the archive.
-   ```
-   $ ssh node01.public.local
-   $ cd /opt
-   $ tar zxvf zts-XCryptFullDisk-8.4.0.tar.gz
-   ```
+
+    ```
+    $ ssh node01.public.local
+    $ cd /opt
+    $ tar zxvf zts-XCryptFullDisk-8.4.0.tar.gz
+    ```
 
 1. Copy hosts.inv.example to hosts.inv.
-   ```
-   $ cd /opt/zettaset/XCryptFullDisk/8.4.0
-   $ cp hosts.inv.example hosts.inv
-   ```
+
+    ```
+    $ cd /opt/zettaset/XCryptFullDisk/8.4.0
+    $ cp hosts.inv.example hosts.inv
+    ```
 
 1. When testing this product, you might want to configure the following partitions and mount points on a test node. This will be the encrypted partition. Instructions in a later section illustrate how to use these specific partitions. SSH to the data nodes in your cluster and run the following commands:
-   ```      
-   $ mkfs.ext4 /dev/sdc1                          # create a file system sdc1
-   $ mkdir -p /var/lib/zts/slave/crypt1           # makes the linux dir
-   ```
-   ext3, ext4, and xfs file systems are supported. Be sure that your desired file system is installed on your target node before installing XCrypt Full Disk (e.g., xfs is not always available by default).
+
+    ```      
+    $ mkfs.ext4 /dev/sdc1                          # create a file system sdc1
+    $ mkdir -p /var/lib/zts/slave/crypt1           # makes the linux dir
+    ```
+    ext3, ext4, and xfs file systems are supported. Be sure that your desired file system is installed on your target node before installing XCrypt Full Disk (e.g., xfs is not always available by default).
 
 1. Proceed to [Configuring the Inventory File](#configuring_inv). 
 
@@ -125,7 +122,7 @@ kmip_server_port=6666
 kmip_client_timeout=300000
 ```
 
-A KMIP compatible key manager is required to process key requests. Set the `kmip_master_ip` and `kmip_master_port` to point to your key management device. Additionally, you must have a valid, CA-signed key manager client certificate in pkcs12 format, stored in a keystore on the installer node. Use the `kmip_client_jks` and `kmip_client_jks_passwd` settings shown under the **All Nodes** section to store the jks file's location on the installer node and the jks file's password.
+A KMIP compatible key manager is required to process key requests. Set the `kmip_master_ip` and `kmip_master_port` to point to your key management device. Additionally, you must have a valid, CA-signed key manager client certificate in pkcs12 format, stored in a keystore on the installer node. Use the `kmip_client_jks` and `kmip_client_jks_passwd` settings shown under the **All Nodes** section to store the Java KeyStore location on the installer node and the Java KeyStore password.
 The key manager's CA certificate must be available in PEM format on the installer node, and its location set in the `external_ca_cert_source` setting described above.
 
 Use `kmip_client_timeout` to configure the timeout setting, or just keep the default value of 300000.
@@ -140,7 +137,7 @@ hsm_lib_cfg_env_var=
 hsm_lib_file=
 ```
 
-An HSM is required for key storage. To create and use an internal, software-based HSM, select 4-8 alphanumeric characters for both `hsm_so_pin` and `hsm_user_pin`. Key `hsm_slot` pointed to slot 1. To use a third-party HSM, use the security office and user pin values for `hsm_so_pin` and `hsm_user_pin`. Point `hsm_slot` to your device’s slot number. Use `hsm_lib_cfg_env_var` to configure any environment variables required by your HSM, for example: `hsm_lib_cfg_env_var=env_var_name=value`. Use `hsm_lib_file` to point to the location of your pkcs11 module.
+An HSM is required for key storage. To create and use an internal, software-based HSM, select 4-8 alphanumeric characters for both `hsm_so_pin` and `hsm_user_pin`. Keep `hsm_slot` pointed to slot 1. To use a third-party HSM, use the security office and user pin values for `hsm_so_pin` and `hsm_user_pin`. Point `hsm_slot` to your device’s slot number. Use `hsm_lib_cfg_env_var` to configure any environment variables required by your HSM, for example: `hsm_lib_cfg_env_var=env_var_name=value`. Use `hsm_lib_file` to point to the location of your pkcs11 module.
 
 NOTE: When using a third party HSM, remember to secure the PINs in this file after the installation.
 
@@ -191,18 +188,21 @@ $ cat /dev/zero > /dev/sdb1
 The installer sends the Zettaset XCrypt Full Disk libraries and configuration files to each target node. It also encrypts the nodes and partitions listed in the hosts.inv file. 
 
 1. Perform a sanity check on the inventory file. This will confirm that the settings in your file are valid.
+
     ```
     $ cd /opt/zettaset/8.4.0/XCryptFullDisk 
     $ ./install_zts-xcrypt-full-disk.sh -vv -i hosts.inv check
     ```
 
 1. Run the installer. This will establish secure connectivity between all nodes and services, and encrypt partitions.
+
     ```
     $ cd /opt/zettaset/8.4.0/XCryptFullDisk
     $ ./install_zts-xcrypt-full-disk.sh -vv -i hosts.inv install
     ```
 
 1. View each target node's block devices to confirm partition encryption. Your output will reflect your partitions.
+
     ```
     $ ssh node01 "lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT"
     NAME               FSTYPE         SIZE    MOUNTPOINT
@@ -212,6 +212,7 @@ The installer sends the Zettaset XCrypt Full Disk libraries and configuration fi
     ```
 
 1. View the encryption keys by viewing cryptinittab on the target node:
+
     ```
     $ ssh node01 "cat /etc/zts/conf.default/cryptinittab"
     partition    mount point                  mapper name    key name
